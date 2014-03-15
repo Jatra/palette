@@ -31,39 +31,47 @@ public class MainActivity extends Activity {
 	private static final String LIST = "list";
 
 	private EditText mEt;
-	private View mSwatch;
+//	private View mSwatch;
 	private ListView mList;
 	private ColourAdapter mColourAdapter;
 	private Button mButton;
 	private SharedPreferences mPrefs;
 	private int mBackgroundColour;
 	private View mBackground;
+	private TextView mBackgroundLabel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		mBackgroundColour = mPrefs.getInt(BG, 0xfff);
+		mBackgroundColour = mPrefs.getInt(BG, 0xfff);		
 
 		mColourAdapter = new ColourAdapter(this, null);
 		setContentView(R.layout.activity_main);
 		
 		mBackground = findViewById(R.id.background);
-		mBackground.setBackgroundColor(mBackgroundColour);
+		
+		mBackgroundLabel = (TextView)findViewById(R.id.bg_label);
+		
 		
 		mEt = (EditText)findViewById(R.id.tv1);
 		mButton = (Button)findViewById(R.id.add_button);
 		
-		
-		mSwatch = findViewById(R.id.swatch);
+		mBackgroundLabel.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {				
+				showColourPicker();
+			}
+		});
 		
 		mEt.setOnEditorActionListener(new OnEditorActionListener() {
 		    @Override
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		        boolean handled = false;
 		        if (actionId == EditorInfo.IME_ACTION_SEND) {
-					Colour colour = (Colour)mSwatch.getTag();
+					Colour colour = (Colour)mEt.getTag();
 					mColourAdapter.addColour(colour);
 		            handled = true;
 		        }
@@ -74,15 +82,11 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
@@ -90,11 +94,11 @@ public class MainActivity extends Activity {
 				String input = s.toString();
 				Colour colour = Colour.makeColour(input);
 				if (colour != null) {
-					mSwatch.setBackgroundColor(colour.colour);
-					float[] hsv = new float[3];
-					Color.colorToHSV(0xffffff & colour.colour, hsv);
-					Log.d(TAG, "Color, "+(0xffffff & colour.colour)+", Hue "+hsv[0]);
-					mSwatch.setTag(colour);
+//					mSwatch.setBackgroundColor(colour.mColour);
+					mEt.setBackgroundColor(colour.mColour);
+					mEt.setTextColor(colour.mTextColour);
+//					mSwatch.setTag(colour);
+					mEt.setTag(colour);
 					mButton.setEnabled(true);
 				} else {
 					mButton.setEnabled(false);
@@ -109,11 +113,14 @@ public class MainActivity extends Activity {
 		mButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Colour colour = (Colour)mSwatch.getTag();
+//				Colour colour = (Colour)mSwatch.getTag();
+				Colour colour = (Colour)mEt.getTag();
 				mColourAdapter.addColour(colour);
 			}
 		});
-	
+		setBackgroundColour(mBackgroundColour);
+		
+
 	}
 	
 	
@@ -134,19 +141,14 @@ public class MainActivity extends Activity {
 		
 		switch(item.getItemId()) {
 		case R.id.action_background:
-			onClickColorPickerDialog(item);
+			showColourPicker();
 			return true;
 		}
 		
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void onClickColorPickerDialog(MenuItem item) {
-		//The color picker menu item as been clicked. Show 
-		//a dialog using the custom ColorPickerDialog class.
-		
-		
-		Log.d("mColorPicker", "initial value:" + mBackgroundColour);
+	public void showColourPicker() {
 				
 		final ColorPickerDialog colorDialog = new ColorPickerDialog(this, mBackgroundColour);
 		
@@ -158,9 +160,15 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mBackgroundColour = colorDialog.getColor();
-				Toast.makeText(MainActivity.this, "Selected Color: " + colorToHexString(colorDialog.getColor()), Toast.LENGTH_LONG).show();
 				
-				mBackground.setBackgroundColor(mBackgroundColour);
+				setBackgroundColour(colorDialog.getColor());
+//				String colourDescription = colorToHexString(colorDialog.getColor());
+//				String txt = getResources().getString(R.string.bg_toast);
+//				Toast.makeText(MainActivity.this, txt + colourDescription, Toast.LENGTH_SHORT).show();
+//				
+//				mBackground.setBackgroundColor(mBackgroundColour);
+//				mBackgroundLabel.setText(colourDescription);
+//				mBackgroundLabel.setTextColor(Colour.textColourForBackground(mBackgroundColour));
 				
 				//Save the value in our preferences.
 				SharedPreferences.Editor editor = mPrefs.edit();
@@ -185,5 +193,14 @@ public class MainActivity extends Activity {
 		return String.format("#%06X", 0xFFFFFFFF & color);
 	}
 	
+	private void setBackgroundColour(int color) {
+		String colourDescription = colorToHexString(color);
+		String txt = getResources().getString(R.string.bg_toast);
+		Toast.makeText(MainActivity.this, txt + colourDescription, Toast.LENGTH_SHORT).show();
+		
+		mBackground.setBackgroundColor(mBackgroundColour);
+		mBackgroundLabel.setText(colourDescription);
+		mBackgroundLabel.setTextColor(Colour.textColourForBackground(mBackgroundColour));
+	}
 
 }

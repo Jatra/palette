@@ -63,15 +63,9 @@ public class ColourAdapter extends BaseAdapter {
 		TextView swatch = (TextView)convertView.findViewById(R.id.swatch);
 		ImageButton dismiss = (ImageButton)convertView.findViewById(R.id.dismiss);
 		Colour colour = getItem(position);
-		swatch.setBackgroundColor(colour.colour);
-		swatch.setText(colour.hex);
-		
-		int red = Color.red(colour.colour);
-		int green = Color.green(colour.colour);
-		int blue = Color.blue(colour.colour);
-		
-		int yiq = ((red*299)+(green*587)+(blue*114))/1000;
-		swatch.setTextColor((yiq >= 128) ? Color.BLACK : Color.WHITE);
+		swatch.setBackgroundColor(colour.mColour);
+		swatch.setText(colour.mHex);		
+		swatch.setTextColor(colour.mTextColour);
 
 		dismiss.setOnClickListener(new OnClickListener() {
 			

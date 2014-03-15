@@ -5,12 +5,20 @@ import android.util.Log;
 
 public class Colour {
 	private static final String TAG = Colour.class.getSimpleName();
-	public String hex;
-	public int colour;
+	public String mHex;
+	public int mColour;
+	public int mTextColour;
 	
 	private Colour(String hex, int colour) {
-		this.hex = hex;
-		this.colour = colour;
+		this.mHex = hex;
+		this.mColour = colour;
+//		int red = Color.red(colour);
+//		int green = Color.green(colour);
+//		int blue = Color.blue(colour);
+//		
+//		int yiq = ((red*299)+(green*587)+(blue*114))/1000;
+//		mTextColour = (yiq >= 128) ? Color.BLACK : Color.WHITE;
+		mTextColour = textColourForBackground(colour);
 	}
 	
 	public static Colour makeColour(String typed) {
@@ -58,5 +66,14 @@ public class Colour {
 			sb.append(s.charAt(i));
 		}
 		return sb.toString();
+	}
+	
+	public static int textColourForBackground(int bgColour) {
+		int red = Color.red(bgColour);
+		int green = Color.green(bgColour);
+		int blue = Color.blue(bgColour);
+		
+		int yiq = ((red*299)+(green*587)+(blue*114))/1000;
+		return (yiq >= 128) ? Color.BLACK : Color.WHITE;
 	}
 }
