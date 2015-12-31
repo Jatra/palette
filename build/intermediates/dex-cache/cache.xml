@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/tim/Documents/github/Jatra/palette1/palette/build/intermediates/exploded-aar/palette1/colorPickerView/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="204a78b50513f478c5090dd04bc0f6cbabcdddfd">
+        <dex dex="/Users/tim/Documents/github/Jatra/palette1/palette/build/intermediates/pre-dexed/debug/palette1-colorPickerView-unspecified_7b720f2c76e4321f68a45d215fbe84b2ea24f5a1.jar" />
+    </item>
+    <item
+        jar="/Users/tim/Documents/github/Jatra/palette1/palette/libs/android-support-v4.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5896b0a4e377ac4242eb2bc785220c1c4fc052f4">
+        <dex dex="/Users/tim/Documents/github/Jatra/palette1/palette/build/intermediates/pre-dexed/debug/android-support-v4_0b00b64e86dad953500c8ce5f6f0a278205a2afa.jar" />
+    </item>
+
+</items>
